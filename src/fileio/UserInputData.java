@@ -26,6 +26,9 @@ public final class UserInputData {
      */
     private final ArrayList<String> favoriteMovies;
 
+    private Map<MovieInputData, Double> movieRatings;
+    private Map<SerialInputData, Double> serialRatings;
+
     public UserInputData(final String username, final String subscriptionType,
                          final Map<String, Integer> history,
                          final ArrayList<String> favoriteMovies) {
@@ -49,6 +52,22 @@ public final class UserInputData {
 
     public ArrayList<String> getFavoriteMovies() {
         return favoriteMovies;
+    }
+
+    public Map<MovieInputData, Double> getMovieRatings() {
+        return movieRatings;
+    }
+
+    public void setMovieRatings(Map<MovieInputData, Double> movieRatings) {
+        this.movieRatings = movieRatings;
+    }
+
+    public Map<SerialInputData, Double> getSerialRatings() {
+        return serialRatings;
+    }
+
+    public void setSerialRatings(Map<SerialInputData, Double> serialRatings) {
+        this.serialRatings = serialRatings;
     }
 
     @Override

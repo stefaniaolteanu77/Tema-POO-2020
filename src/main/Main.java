@@ -3,13 +3,12 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import command.Favorite;
+import command.View;
 import common.Constants;
-import fileio.ActionInputData;
-import fileio.Writer;
-import fileio.InputLoader;
-import fileio.Input;
+import fileio.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import user.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +72,7 @@ public final class Main {
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
+        //TODO add here the entry point to your implementation
         List<ActionInputData> actions = input.getCommands();
         for (ActionInputData action : actions) {
             if (action.getActionType().equals("command")) {
@@ -80,10 +80,22 @@ public final class Main {
                     Favorite favorite = new Favorite();
                     favorite.addToFavourite(input, action, fileWriter, arrayResult);
                 }
+                if (action.getType().equals("view")) {
+                    View viewed = new View();
+                    viewed.addToViewed(input, action, fileWriter, arrayResult);
+                }
+
+            }
+            if(action.getActionType().equals("recommendation")) {
+                if(action.getType().equals("standard")) {
+                    UserInputData user = User.lookForUserInDataBase(input,action);
+                    String title =  User.standard(user, input);
+                    String message = "StandardRecommendation result: " + title;
+                    JSONObject object = fileWriter.writeFile(action.getActionId(), null, message);
+                    arrayResult.add(object);
+                }
             }
         }
-
-        //TODO add here the entry point to your implementation
         fileWriter.closeJSON(arrayResult);
     }
 }

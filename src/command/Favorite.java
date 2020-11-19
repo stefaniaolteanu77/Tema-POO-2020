@@ -1,5 +1,5 @@
 package command;
-
+import user.User;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
@@ -9,14 +9,9 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
 
 public class Favorite extends Command {
-
-    private boolean isFavoriteValid(final UserInputData user, final String title) {
-        Map<String, Integer> history = user.getHistory();
-        return history.containsKey(title);
-    }
 
     private String duplicateErrormessage(final String title) {
         return "error -> " + title + " is already in favourite list";
@@ -39,24 +34,17 @@ public class Favorite extends Command {
 
     public void addToFavourite(final Input input, final ActionInputData action,
                    final Writer writer, final JSONArray arrayResult) throws IOException {
-        List<UserInputData> users = input.getUsers();
         String title = action.getTitle();
-        for (UserInputData user : users) {
-            if (action.getUsername().equals(user.getUsername())) {
-                if (isFavoriteValid(user, title)) {
-                    if (user.getFavoriteMovies().contains(title)) {
-                        addToArrayResult(action, writer, arrayResult,
-                                duplicateErrormessage(title));
-                    } else {
-                        user.getFavoriteMovies().add(title);
-                        addToArrayResult(action, writer, arrayResult, validMessage(title));
-                    }
-                } else {
-                      addToArrayResult(action, writer,
-                              arrayResult, invalidErrormessage(title));
-                }
+        UserInputData user = User.lookForUserInDataBase(input,action);
+        if (User.lookInHistory(user, title)) {
+            if (User.lookInFavorite(user, title)) {
+                addToArrayResult(action, writer, arrayResult, duplicateErrormessage(title));
+            } else {
+                user.getFavoriteMovies().add(title);
+                addToArrayResult(action, writer, arrayResult, validMessage(title));
             }
+        } else {
+            addToArrayResult(action, writer, arrayResult, invalidErrormessage(title));
         }
     }
-
 }
