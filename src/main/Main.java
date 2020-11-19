@@ -2,21 +2,25 @@ package main;
 
 import checker.Checkstyle;
 import checker.Checker;
+import command.Favorite;
 import common.Constants;
-import fileio.Input;
-import fileio.InputLoader;
+import fileio.ActionInputData;
 import fileio.Writer;
+import fileio.InputLoader;
+import fileio.Input;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * The entry point to this homework. It runs the checker that tests your implentation.
+ * The entry point to this homework. It runs the checker that tests your implementation.
  */
 public final class Main {
     /**
@@ -66,12 +70,20 @@ public final class Main {
                               final String filePath2) throws IOException {
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
-
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
-        //TODO add here the entry point to your implementation
+        List<ActionInputData> actions = input.getCommands();
+        for (ActionInputData action : actions) {
+            if (action.getActionType().equals("command")) {
+                if (action.getType().equals("favorite")) {
+                    Favorite favorite = new Favorite();
+                    favorite.addToFavourite(input, action, fileWriter, arrayResult);
+                }
+            }
+        }
 
+        //TODO add here the entry point to your implementation
         fileWriter.closeJSON(arrayResult);
     }
 }
