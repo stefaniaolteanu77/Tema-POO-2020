@@ -1,6 +1,8 @@
-package user;
-
+package query;
+import entertainment.Season;
 import fileio.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +17,7 @@ public final class User {
     public static boolean lookInFavorite(final UserInputData user, final String title) {
         return user.getFavoriteMovies().contains(title);
     }
-    public static UserInputData lookForUserInDataBase(Input input, ActionInputData action) {
-        List<UserInputData> users = input.getUsers();
+    public static UserInputData lookForUserInDataBase(List<UserInputData> users, ActionInputData action) {
         for (UserInputData user : users) {
             if (user.getUsername().equals(action.getUsername())) {
                 return user;
@@ -24,6 +25,9 @@ public final class User {
         }
         return null;
     }
+
+
+
     public static String standard(final UserInputData user, final Input input) {
         List<MovieInputData> databaseMovies = input.getMovies();
         List<SerialInputData> databaseSerial = input.getSerials();

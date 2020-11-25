@@ -2,13 +2,16 @@ package main;
 
 import checker.Checkstyle;
 import checker.Checker;
-import command.Favorite;
-import command.View;
+import command.Command;
+import command.QueryAverage;
+import command.QueryAwards;
+import command.VideoRating;
 import common.Constants;
 import fileio.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import user.User;
+import query.User;
+import utils.WriterHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,27 +76,31 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
+        WriterHelper writerHelper = new WriterHelper(fileWriter,arrayResult);
+        Command command = new Command(writerHelper, input);
+
         List<ActionInputData> actions = input.getCommands();
         for (ActionInputData action : actions) {
-            if (action.getActionType().equals("command")) {
-                if (action.getType().equals("favorite")) {
-                    Favorite favorite = new Favorite();
-                    favorite.addToFavourite(input, action, fileWriter, arrayResult);
-                }
-                if (action.getType().equals("view")) {
-                    View viewed = new View();
-                    viewed.addToViewed(input, action, fileWriter, arrayResult);
-                }
-
-            }
-            if(action.getActionType().equals("recommendation")) {
-                if(action.getType().equals("standard")) {
-                    UserInputData user = User.lookForUserInDataBase(input,action);
-                    String title =  User.standard(user, input);
+            command.applyCommand(action, input);
+            if (action.getActionType().equals("recommendation")) {
+                if (action.getType().equals("standard")) {
+                    UserInputData user = User.lookForUserInDataBase(input.getUsers(), action);
+                    String title = User.standard(user, input);
                     String message = "StandardRecommendation result: " + title;
                     JSONObject object = fileWriter.writeFile(action.getActionId(), null, message);
                     arrayResult.add(object);
                 }
+            }
+            if(action.getActionType().equals("query")) {
+                if(action.getCriteria().equals("average")) {
+                    QueryAverage queryAverage = new QueryAverage(input.getMovies(),input.getSerials());
+                    queryAverage.queryAverage(input, action, writerHelper);
+                }
+                if(action.getCriteria().equals("ratings")) {
+                    VideoRating videoRating = new VideoRating();
+                    videoRating.QueryVideoRating(input,action, writerHelper);
+                }
+
             }
         }
         fileWriter.closeJSON(arrayResult);

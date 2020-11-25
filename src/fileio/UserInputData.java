@@ -1,6 +1,9 @@
 package fileio;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +29,9 @@ public final class UserInputData {
      */
     private final ArrayList<String> favoriteMovies;
 
-    private Map<MovieInputData, Double> movieRatings;
-    private Map<SerialInputData, Double> serialRatings;
+    private List<String> moviesRated;
+    private Map<String, List<Integer>> seasonsRated;
+    private Map<String, Double> serialsRating;
 
     public UserInputData(final String username, final String subscriptionType,
                          final Map<String, Integer> history,
@@ -36,8 +40,10 @@ public final class UserInputData {
         this.subscriptionType = subscriptionType;
         this.favoriteMovies = favoriteMovies;
         this.history = history;
+        moviesRated = new ArrayList<>();
+        seasonsRated = new HashMap<>();
+        serialsRating = new HashMap<>();
     }
-
     public String getUsername() {
         return username;
     }
@@ -54,20 +60,16 @@ public final class UserInputData {
         return favoriteMovies;
     }
 
-    public Map<MovieInputData, Double> getMovieRatings() {
-        return movieRatings;
+    public List<String> getMoviesRated() {
+        return moviesRated;
     }
 
-    public void setMovieRatings(Map<MovieInputData, Double> movieRatings) {
-        this.movieRatings = movieRatings;
+    public Map<String, List<Integer>> getSeasonsRated() {
+        return seasonsRated;
     }
 
-    public Map<SerialInputData, Double> getSerialRatings() {
-        return serialRatings;
-    }
-
-    public void setSerialRatings(Map<SerialInputData, Double> serialRatings) {
-        this.serialRatings = serialRatings;
+    public Map<String, Double> getSerialRating() {
+        return serialsRating;
     }
 
     @Override

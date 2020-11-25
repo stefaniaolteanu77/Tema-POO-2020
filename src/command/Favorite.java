@@ -1,17 +1,20 @@
 package command;
-import user.User;
+import query.User;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import utils.Searcher;
+import utils.WriterHelper;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.stream.Collectors;
 
 
-public class Favorite extends Command {
+public final class Favorite extends Command {
+
+    public Favorite(WriterHelper writerHelper, Input input) {
+        super(writerHelper, input);
+    }
 
     private String duplicateErrormessage(final String title) {
         return "error -> " + title + " is already in favourite list";
@@ -25,26 +28,19 @@ public class Favorite extends Command {
         return "success -> " + title + " was added as favourite";
     }
 
-    private void addToArrayResult(final ActionInputData action, final Writer writer,
-                                 final JSONArray arrayResult, final String message)
-            throws IOException {
-        JSONObject object = writer.writeFile(action.getActionId(), null, message);
-        arrayResult.add(object);
-    }
 
-    public void addToFavourite(final Input input, final ActionInputData action,
-                   final Writer writer, final JSONArray arrayResult) throws IOException {
+    public void addToFavourite(final ActionInputData action) throws IOException {
         String title = action.getTitle();
-        UserInputData user = User.lookForUserInDataBase(input,action);
-        if (User.lookInHistory(user, title)) {
+        UserInputData user = User.lookForUserInDataBase(users,action);
+        if (user != null && User.lookInHistory(user, title)) {
             if (User.lookInFavorite(user, title)) {
-                addToArrayResult(action, writer, arrayResult, duplicateErrormessage(title));
+                writerHelper.addToArrayResult(action, duplicateErrormessage(title));
             } else {
                 user.getFavoriteMovies().add(title);
-                addToArrayResult(action, writer, arrayResult, validMessage(title));
+                writerHelper.addToArrayResult(action, validMessage(title));
             }
         } else {
-            addToArrayResult(action, writer, arrayResult, invalidErrormessage(title));
+            writerHelper.addToArrayResult(action, invalidErrormessage(title));
         }
     }
 }
