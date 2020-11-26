@@ -2,15 +2,11 @@ package main;
 
 import checker.Checkstyle;
 import checker.Checker;
-import command.Command;
-import command.QueryAverage;
-import command.QueryAwards;
-import command.VideoRating;
+import command.*;
 import common.Constants;
 import fileio.*;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import query.User;
+import query.Query;
 import utils.WriterHelper;
 
 import java.io.File;
@@ -78,30 +74,13 @@ public final class Main {
         //TODO add here the entry point to your implementation
         WriterHelper writerHelper = new WriterHelper(fileWriter,arrayResult);
         Command command = new Command(writerHelper, input);
-
+        Query query = new Query(writerHelper,input);
+        recommendation.Recommendation recomm = new recommendation.Recommendation(writerHelper, input);
         List<ActionInputData> actions = input.getCommands();
         for (ActionInputData action : actions) {
             command.applyCommand(action, input);
-            if (action.getActionType().equals("recommendation")) {
-                if (action.getType().equals("standard")) {
-                    UserInputData user = User.lookForUserInDataBase(input.getUsers(), action);
-                    String title = User.standard(user, input);
-                    String message = "StandardRecommendation result: " + title;
-                    JSONObject object = fileWriter.writeFile(action.getActionId(), null, message);
-                    arrayResult.add(object);
-                }
-            }
-            if(action.getActionType().equals("query")) {
-                if(action.getCriteria().equals("average")) {
-                    QueryAverage queryAverage = new QueryAverage(input.getMovies(),input.getSerials());
-                    queryAverage.queryAverage(input, action, writerHelper);
-                }
-                if(action.getCriteria().equals("ratings")) {
-                    VideoRating videoRating = new VideoRating();
-                    videoRating.QueryVideoRating(input,action, writerHelper);
-                }
-
-            }
+            query.applyQuery(action,input);
+            recomm.applyRecommendation(action,input);
         }
         fileWriter.closeJSON(arrayResult);
     }

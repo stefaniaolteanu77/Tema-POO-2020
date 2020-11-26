@@ -1,4 +1,4 @@
-package query;
+package command;
 import entertainment.Season;
 import fileio.*;
 

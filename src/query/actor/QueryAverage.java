@@ -1,8 +1,9 @@
-package command;
+package query.actor;
 
+import command.rating.SerialRating;
 import fileio.*;
-import query.MovieRating;
-import query.SerialRating;
+import command.rating.MovieRating;
+import utils.Sort;
 import utils.Searcher;
 import utils.WriterHelper;
 
@@ -19,7 +20,7 @@ public class QueryAverage {
         this.serial = serial;
     }
 
-    public Double setActorRating(Input input, ActorInputData actor) {
+    private Double getActorRating(ActorInputData actor) {
         List<String> filmography = actor.getFilmography();
         int numberOfVideos = 0;
         double sum = 0;
@@ -28,7 +29,7 @@ public class QueryAverage {
             Searcher searcher = new Searcher(movie, serial);
             MovieInputData movie = searcher.lookForMovie(video);
             if (movie != null) {
-                MovieRating helper = new MovieRating(movie, null);
+                MovieRating helper = new MovieRating(movie);
                 rating = helper.getTotalMovieRating();
                 if (rating != 0) {
                     sum += rating;
@@ -37,7 +38,7 @@ public class QueryAverage {
             }
             SerialInputData serial = searcher.lookForSerial(video);
             if (serial != null) {
-                SerialRating helper = new SerialRating(null, serial);
+                SerialRating helper = new SerialRating(serial);
                 rating = helper.getTotalSerialRating();
                 if (rating != 0) {
                     sum += rating;
@@ -46,33 +47,20 @@ public class QueryAverage {
             }
         }
         if (numberOfVideos == 0) {
-            return Double.valueOf(0);
+            return (double) 0;
         }
         return sum / numberOfVideos;
     }
 
     public void queryAverage(Input input, ActionInputData action, WriterHelper writerHelper) throws IOException {
         Map<String, Double> ratings = new LinkedHashMap<>();
-        int number = action.getNumber();
         for (ActorInputData actor : input.getActors()) {
-            Double rating = setActorRating(input, actor);
+            Double rating = getActorRating(actor);
             if (rating != 0) {
                 ratings.put(actor.getName(), rating);
             }
         }
-        Map<String, Double> result2 = new LinkedHashMap<>();
-        if (action.getSortType().equals("asc")) {
-            ratings.entrySet().stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().thenComparing(Map.Entry.comparingByKey()))
-                .forEachOrdered(x -> result2.put(x.getKey(), x.getValue()));
-        }
-        if (action.getSortType().equals("desc")) {
-            ratings.entrySet().stream()
-                    .sorted(Map.Entry.<String, Double>comparingByValue(Comparator.reverseOrder()).
-                            thenComparing(Map.Entry.comparingByKey(Comparator.reverseOrder())))
-                    .forEachOrdered(x -> result2.put(x.getKey(), x.getValue()));
-        }
-        List<String> avgActors = result2.keySet().stream().limit(number).collect(Collectors.toList());
+        List<String> avgActors = Sort.sortByDouble(ratings, action);
         String result = avgActors.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(", ", "Query result: [", "]"));

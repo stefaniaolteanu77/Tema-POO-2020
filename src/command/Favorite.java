@@ -1,13 +1,10 @@
 package command;
-import query.User;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
-import utils.Searcher;
 import utils.WriterHelper;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 
 public final class Favorite extends Command {

@@ -3,7 +3,6 @@ package command;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
-import query.User;
 import utils.WriterHelper;
 
 import java.io.IOException;
@@ -18,7 +17,6 @@ public class View extends Command {
     private String validMessage(final String title, Integer numViews) {
         return "success -> " + title + " was viewed with total views of " + numViews;
     }
-
 
     public void addToViewed(final ActionInputData action) throws IOException {
         String title = action.getTitle();

@@ -8,8 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieFilters {
+    List<MovieInputData> inputMovies;
 
-    public List<MovieInputData> filterByYear(List<MovieInputData> inputMovies, String year) {
+    public MovieFilters(List<MovieInputData> movies) {
+        inputMovies = movies;
+    }
+
+    public List<MovieInputData> filterByYear(String year) {
         List<MovieInputData> movies = new ArrayList<>();
         for (MovieInputData movie : inputMovies) {
             if (Integer.toString(movie.getYear()).equals(year)) {
@@ -19,12 +24,11 @@ public class MovieFilters {
         return movies;
     }
 
-    public List<MovieInputData> filterByGenre(List<MovieInputData> inputMovies, List<String> genre) {
+    public List<MovieInputData> filterByGenre(List<String> genre) {
         List<MovieInputData> movies = new ArrayList<>();
         for (MovieInputData movie : inputMovies) {
             if(movie.getGenres().containsAll(genre)) {
                 movies.add(movie);
-
             }
         }
         return movies;
@@ -36,17 +40,18 @@ public class MovieFilters {
         if(filters.isEmpty()) {
             filteredMovies = input.getMovies();
         } else {
-            if(filters.get(0) != null) {
+            if (filters.get(0) != null) {
                  String year = filters.get(0).get(0);
-                 filteredMovies = filterByYear(input.getMovies(), year);
+                 filteredMovies = filterByYear(year);
                  if (filters.get(1) != null) {
                      List<String> genre = filters.get(1);
-                     filteredMovies = filterByGenre(filteredMovies, genre);
+                     inputMovies = filteredMovies;
+                     filteredMovies = filterByGenre(genre);
                  }
             }
             else if (filters.get(1) != null) {
                 List<String> genre = filters.get(1);
-                filteredMovies = filterByGenre(input.getMovies(), genre);
+                filteredMovies = filterByGenre(genre);
             }
         }
         return filteredMovies;
