@@ -46,11 +46,12 @@ public class VideoDuration {
         if (serials != null) {
             for (SerialInputData serial : serials) {
                 int totalDuration = 0;
-                for(Season season:serial.getSeasons()) {
+                for (Season season:serial.getSeasons()) {
                     totalDuration += season.getDuration();
                 }
-                Integer duration = totalDuration;
-                durations.put(serial.getTitle(), duration);
+                if (totalDuration != 0) {
+                    durations.put(serial.getTitle(), totalDuration);
+                }
             }
             List<String> longestMovie = Sort.sortByInteger(durations,action);
             String result = longestMovie.stream()

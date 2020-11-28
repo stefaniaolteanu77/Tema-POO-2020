@@ -15,9 +15,17 @@ public class QueryDescription {
     public void queryDescription(Input input, ActionInputData action, WriterHelper writerHelper) throws IOException {
         ActorFilters actorFilters = new ActorFilters(input.getActors());
         List<ActorInputData> filteredActors = actorFilters.filterByDescription(action.getFilters().get(2));
-        List<ActorInputData> sortedList = filteredActors.stream().
-                sorted(Comparator.comparing(ActorInputData::getName))
-                .collect(Collectors.toList());
+        List<ActorInputData> sortedList;
+        if (action.getSortType().equals("asc")) {
+            sortedList = filteredActors.stream().
+                    sorted(Comparator.comparing(ActorInputData::getName))
+                    .collect(Collectors.toList());
+        }
+        else {
+             sortedList = filteredActors.stream().
+                    sorted(Comparator.comparing(ActorInputData::getName).reversed())
+                    .collect(Collectors.toList());
+        }
         List<String> field1List = sortedList.stream().map(ActorInputData::getName).collect(Collectors.toList());
         String result = field1List.stream()
                 .map(String::valueOf)

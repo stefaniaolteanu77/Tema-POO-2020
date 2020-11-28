@@ -3,6 +3,7 @@ package filters;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.MovieInputData;
+import fileio.SerialInputData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,9 @@ public class MovieFilters {
         inputMovies = movies;
     }
 
-    public List<MovieInputData> filterByYear(String year) {
+    public List<MovieInputData> filterByYear(String year, List<MovieInputData> moviesInput) {
         List<MovieInputData> movies = new ArrayList<>();
-        for (MovieInputData movie : inputMovies) {
+        for (MovieInputData movie : moviesInput) {
             if (Integer.toString(movie.getYear()).equals(year)) {
                 movies.add(movie);
             }
@@ -24,9 +25,9 @@ public class MovieFilters {
         return movies;
     }
 
-    public List<MovieInputData> filterByGenre(List<String> genre) {
+    public List<MovieInputData> filterByGenre(List<String> genre, List<MovieInputData> moviesInput) {
         List<MovieInputData> movies = new ArrayList<>();
-        for (MovieInputData movie : inputMovies) {
+        for (MovieInputData movie : moviesInput) {
             if(movie.getGenres().containsAll(genre)) {
                 movies.add(movie);
             }
@@ -37,22 +38,20 @@ public class MovieFilters {
     public List<MovieInputData> applyFilters(Input input, ActionInputData action) {
         List <MovieInputData> filteredMovies = new ArrayList<>();
         List<List<String>> filters = action.getFilters();
-        if(filters.isEmpty()) {
-            filteredMovies = input.getMovies();
-        } else {
-            if (filters.get(0) != null) {
-                 String year = filters.get(0).get(0);
-                 filteredMovies = filterByYear(year);
-                 if (filters.get(1) != null) {
-                     List<String> genre = filters.get(1);
-                     inputMovies = filteredMovies;
-                     filteredMovies = filterByGenre(genre);
+        List<String> yearFilter = filters.get(0);
+        List<String> genreFilter = filters.get(1);
+        if(yearFilter.get(0) == null && genreFilter.get(0) == null) {
+            return inputMovies;
+        }
+        if (yearFilter.get(0) != null) {
+                 String year = yearFilter.get(0);
+                 filteredMovies = filterByYear(year, inputMovies);
+                 if (genreFilter.get(0) != null) {
+                     filteredMovies = filterByGenre(genreFilter, filteredMovies);
                  }
             }
-            else if (filters.get(1) != null) {
-                List<String> genre = filters.get(1);
-                filteredMovies = filterByGenre(genre);
-            }
+        else if (genreFilter.get(0) != null) {
+            filteredMovies = filterByGenre(genreFilter, inputMovies);
         }
         return filteredMovies;
     }

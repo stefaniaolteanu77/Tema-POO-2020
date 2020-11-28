@@ -7,6 +7,7 @@ import common.Constants;
 import fileio.*;
 import org.json.simple.JSONArray;
 import query.Query;
+import recommendation.Recommendation;
 import utils.WriterHelper;
 
 import java.io.File;
@@ -75,12 +76,12 @@ public final class Main {
         WriterHelper writerHelper = new WriterHelper(fileWriter,arrayResult);
         Command command = new Command(writerHelper, input);
         Query query = new Query(writerHelper,input);
-        recommendation.Recommendation recomm = new recommendation.Recommendation(writerHelper, input);
+        Recommendation recomm = new Recommendation(writerHelper,input);
         List<ActionInputData> actions = input.getCommands();
         for (ActionInputData action : actions) {
-            command.applyCommand(action, input);
-            query.applyQuery(action,input);
-            recomm.applyRecommendation(action,input);
+            command.applyCommand(action);
+            query.applyQuery(action);
+            recomm.applyRecommendation(action);
         }
         fileWriter.closeJSON(arrayResult);
     }

@@ -5,14 +5,13 @@ import fileio.ActorInputData;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActorFilters {
 
-    List<ActorInputData> actors;
+    private final List<ActorInputData> actors;
 
     public ActorFilters(List<ActorInputData> actors) {
         this.actors = actors;
@@ -45,12 +44,20 @@ public class ActorFilters {
 
     public List<ActorInputData> filterByDescription(List<String> words) {
         List<ActorInputData> filteredActors = new ArrayList<>();
-        boolean allWordsInDescription = true;
         for (ActorInputData actor : actors) {
+            boolean allWordsInDescription = true;
             String description = actor.getCareerDescription();
+            List<String> descriptionList = new ArrayList<>(Arrays.asList(description.split("[- ,.]")));
             for (String word : words) {
-                if (!(description.contains(word) || description.contains(word.toUpperCase())
-                    || description.contains(word.toLowerCase()))) {
+                boolean wordInDescription = false;
+                String capitalised = word.substring(0,1).toUpperCase() + word.substring(1);
+                for (String descriptionWord : descriptionList) {
+                    if (descriptionWord.equals(word) || descriptionWord.equals(capitalised)) {
+                        wordInDescription = true;
+                        break;
+                    }
+                }
+                if (!wordInDescription) {
                     allWordsInDescription = false;
                     break;
                 }

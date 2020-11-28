@@ -1,10 +1,8 @@
 package query.actor;
 
-import command.rating.SerialRating;
 import fileio.*;
-import command.rating.MovieRating;
+import query.video.VideoRating;
 import utils.Sort;
-import utils.Searcher;
 import utils.WriterHelper;
 
 import java.io.IOException;
@@ -12,43 +10,46 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class QueryAverage {
-    List<MovieInputData> movie;
-    List<SerialInputData> serial;
+    List<MovieInputData> movies;
+    List<SerialInputData> serials;
 
-    public QueryAverage(List<MovieInputData> movie, List<SerialInputData> serial) {
-        this.movie = movie;
-        this.serial = serial;
+    public QueryAverage(List<MovieInputData> movies, List<SerialInputData> serials) {
+        this.movies = movies;
+        this.serials = serials;
     }
 
     private Double getActorRating(ActorInputData actor) {
         List<String> filmography = actor.getFilmography();
+        VideoRating helperRating = new VideoRating();
         int numberOfVideos = 0;
         double sum = 0;
         double rating;
         for (String video : filmography) {
-            Searcher searcher = new Searcher(movie, serial);
-            MovieInputData movie = searcher.lookForMovie(video);
-            if (movie != null) {
-                MovieRating helper = new MovieRating(movie);
-                rating = helper.getTotalMovieRating();
-                if (rating != 0) {
-                    sum += rating;
-                    numberOfVideos++;
+            for (MovieInputData movie : movies) {
+                if (movie.getTitle().equals(video)) {
+                    rating = helperRating.getTotalMovieRating(movie);
+                    if (rating != 0) {
+                        sum += rating;
+                        numberOfVideos++;
+                    }
+                    break;
                 }
             }
-            SerialInputData serial = searcher.lookForSerial(video);
-            if (serial != null) {
-                SerialRating helper = new SerialRating(serial);
-                rating = helper.getTotalSerialRating();
-                if (rating != 0) {
-                    sum += rating;
-                    numberOfVideos++;
+            for (SerialInputData serial : serials) {
+                if (serial.getTitle().equals(video)) {
+                    rating = helperRating.getTotalSerialRating(serial);
+                    if (rating != 0) {
+                        sum += rating;
+                        numberOfVideos++;
+                    }
+                    break;
                 }
             }
         }
         if (numberOfVideos == 0) {
             return (double) 0;
         }
+
         return sum / numberOfVideos;
     }
 

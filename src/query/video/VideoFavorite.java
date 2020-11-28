@@ -43,7 +43,9 @@ public class VideoFavorite {
         if (movies != null) {
             for (MovieInputData movie : movies) {
                 Integer favorite = getMovieFavorite(input, movie);
-                favorited.put(movie.getTitle(), favorite);
+                if(favorite != 0) {
+                    favorited.put(movie.getTitle(), favorite);
+                }
             }
             List<String> favoriteMovies = Sort.sortByInteger(favorited,action);
             String result = favoriteMovies.stream()
@@ -63,7 +65,9 @@ public class VideoFavorite {
         if (serials != null) {
             for (SerialInputData serial : serials) {
                 Integer favorite = getSerialFavorite(input, serial);
-                favorited.put(serial.getTitle(), favorite);
+                if (favorite != 0) {
+                    favorited.put(serial.getTitle(), favorite);
+                }
             }
             List<String> favoriteMovies = Sort.sortByInteger(favorited,action);
             String result = favoriteMovies.stream()

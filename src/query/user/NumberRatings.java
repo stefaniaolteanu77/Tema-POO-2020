@@ -3,6 +3,7 @@ package query.user;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
+import fileio.Writer;
 import utils.Sort;
 import utils.WriterHelper;
 
@@ -14,7 +15,13 @@ import java.util.stream.Collectors;
 
 
 public class NumberRatings {
+    private WriterHelper writerHelper;
+    private Input input;
 
+    public NumberRatings(WriterHelper writerHelper, Input input) {
+        this.writerHelper = writerHelper;
+        this.input = input;
+    }
 
     public Integer getUserRating(UserInputData user) {
         int SerialRatings = 0;
@@ -24,7 +31,7 @@ public class NumberRatings {
         return user.getMoviesRated().size() + SerialRatings;
     }
 
-    public void queryNumberRatings(Input input, ActionInputData action, WriterHelper writerHelper) throws IOException {
+    public void applyQueryNumberRatings(ActionInputData action) throws IOException {
         Map<String, Integer> numberRatings = new LinkedHashMap<>();
         for (UserInputData user : input.getUsers()) {
             Integer number = getUserRating(user);

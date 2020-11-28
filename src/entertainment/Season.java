@@ -26,6 +26,7 @@ public final class Season {
     public Season(final int currentSeason, final int duration) {
         this.currentSeason = currentSeason;
         this.duration = duration;
+        rating = (double)0;
     }
 
     public int getCurrentSeason() {

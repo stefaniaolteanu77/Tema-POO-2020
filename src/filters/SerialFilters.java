@@ -14,9 +14,9 @@ public class SerialFilters {
         inputSerials = serials;
     }
 
-    public List<SerialInputData> filterByYear(String year) {
+    public List<SerialInputData> filterByYear(String year, List<SerialInputData> serialsInput) {
         List<SerialInputData> serials = new ArrayList<>();
-        for (SerialInputData serial : inputSerials) {
+        for (SerialInputData serial : serialsInput) {
             if (Integer.toString(serial.getYear()).equals(year)) {
                 serials.add(serial);
             }
@@ -24,9 +24,9 @@ public class SerialFilters {
         return serials;
     }
 
-    public List<SerialInputData> filterByGenre(List<String> genre) {
+    public List<SerialInputData> filterByGenre(List<String> genre, List<SerialInputData> serialsInput) {
         List<SerialInputData> serials = new ArrayList<>();
-        for (SerialInputData serial : inputSerials) {
+        for (SerialInputData serial : serialsInput) {
             if(serial.getGenres().containsAll(genre)) {
                 serials.add(serial);
             }
@@ -35,25 +35,24 @@ public class SerialFilters {
     }
 
     public List<SerialInputData> applyFilters(Input input, ActionInputData action) {
-        List <SerialInputData> filteredserials = new ArrayList<>();
         List<List<String>> filters = action.getFilters();
-        if(filters.isEmpty()) {
-            filteredserials = input.getSerials();
-        } else {
-            if (filters.get(0) != null) {
+        List<String> yearFilter = filters.get(0);
+        List<String> genreFilter = filters.get(1);
+        if (yearFilter.get(0) == null && genreFilter.get(0) == null) {
+            return inputSerials;
+        }
+        List<SerialInputData> filteredSerials = null;
+        if (yearFilter.get(0) != null) {
                 String year = filters.get(0).get(0);
-                filteredserials = filterByYear(year);
-                if (filters.get(1) != null) {
-                    List<String> genre = filters.get(1);
-                    inputSerials = filteredserials;
-                    filteredserials = filterByGenre(genre);
+                filteredSerials = filterByYear(year, inputSerials);
+                if (genreFilter.get(0) != null) {
+                    filteredSerials = filterByGenre(genreFilter, filteredSerials);
                 }
             }
-            else if (filters.get(1) != null) {
-                List<String> genre = filters.get(1);
-                filteredserials = filterByGenre(genre);
-            }
+        else if (genreFilter.get(0) != null) {
+            filteredSerials = filterByGenre(genreFilter, inputSerials);
         }
-        return filteredserials;
+
+        return filteredSerials;
     }
 }

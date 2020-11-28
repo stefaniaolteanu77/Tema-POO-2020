@@ -1,6 +1,6 @@
 package query.video;
 
-import command.rating.MovieRating;
+import command.User;
 import fileio.*;
 import filters.MovieFilters;
 import filters.SerialFilters;
@@ -18,6 +18,10 @@ public class VideoMostViewed {
         Integer movieView = 0;
         for (UserInputData user : input.getUsers()) {
             for(String movieTitle : user.getHistory().keySet()) {
+                if(!user.getHistory().containsKey(movieTitle)) {
+                    movieView = 0;
+                    return movieView;
+                }
                 if(movieTitle.equals(movie.getTitle())) {
                     movieView += user.getHistory().get(movieTitle);
                 }
@@ -29,9 +33,12 @@ public class VideoMostViewed {
     private Integer getSerialViews(Input input, SerialInputData serial) {
         Integer movieView = 0;
         for (UserInputData user : input.getUsers()) {
-            for(String movieTitle : user.getHistory().keySet()) {
-                if(movieTitle.equals(serial.getTitle())) {
-                    movieView += user.getHistory().get(movieTitle);
+            for(String serialTitle : user.getHistory().keySet()) {
+                if(!user.getHistory().containsKey(serialTitle)) {
+                    return 0;
+                }
+                if(serialTitle.equals(serial.getTitle())) {
+                    movieView += user.getHistory().get(serialTitle);
                 }
             }
         }
@@ -44,10 +51,12 @@ public class VideoMostViewed {
         if (movies != null) {
             for (MovieInputData movie : movies) {
                 Integer views = getMovieViews(input, movie);
-                viewed.put(movie.getTitle(), views);
+                if(views != 0) {
+                    viewed.put(movie.getTitle(), views);
+                }
             }
-            List<String> mostViewdMovies = Sort.sortByInteger(viewed,action);
-            String result = mostViewdMovies.stream()
+            List<String> mostViewedMovies = Sort.sortByInteger(viewed,action);
+            String result = mostViewedMovies.stream()
                     .map(String::valueOf)
                     .collect(Collectors.joining(", ", "Query result: [", "]"));
             helper.addToArrayResult(action, result);
@@ -57,17 +66,19 @@ public class VideoMostViewed {
         }
     }
 
-    public void querySerialMostViewd(Input input, ActionInputData action, WriterHelper helper) throws IOException {
+    public void querySerialMostViewed(Input input, ActionInputData action, WriterHelper helper) throws IOException {
         SerialFilters filter = new SerialFilters(input.getSerials());
         Map<String, Integer> viewed = new LinkedHashMap<>();
         List<SerialInputData> serials = filter.applyFilters(input, action);
         if (serials != null) {
-            for (SerialInputData serial : input.getSerials()) {
+            for (SerialInputData serial : serials) {
                 Integer views = getSerialViews(input, serial);
-                viewed.put(serial.getTitle(), views);
+                if(views != 0) {
+                    viewed.put(serial.getTitle(), views);
+                }
             }
-            List<String> mostViewdSerials = Sort.sortByInteger(viewed,action);
-            String result = mostViewdSerials.stream()
+            List<String> mostViewedSerials = Sort.sortByInteger(viewed,action);
+            String result = mostViewedSerials.stream()
                     .map(String::valueOf)
                     .collect(Collectors.joining(", ", "Query result: [", "]"));
             helper.addToArrayResult(action, result);

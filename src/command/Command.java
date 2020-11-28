@@ -7,34 +7,39 @@ import java.io.IOException;
 import java.util.List;
 
 public class Command {
-    public WriterHelper writerHelper;
-    List<UserInputData> users;
-    List<MovieInputData> movies;
-    List<SerialInputData> serials;
+    private WriterHelper writerHelper;
+    private Input input;
+
     public Command(WriterHelper writerHelper, Input input) {
         this.writerHelper = writerHelper;
-        this.users = input.getUsers();
-        this.movies = input.getMovies();
-        this.serials = input.getSerials();
+        this.input = input;
     }
-
-    public void applyCommand(final ActionInputData action, final Input input)
+    public UserInputData getUserFromInput (String username) {
+        for (UserInputData user : input.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+    public void applyCommand(final ActionInputData action)
             throws IOException {
         if (action.getActionType().equals("command")) {
+            UserInputData user = getUserFromInput(action.getUsername());
             switch (action.getType()) {
                 case "favorite":
                     Favorite favorite = new Favorite(writerHelper, input);
-                    favorite.addToFavourite(action);
+                    favorite.addToFavourite(user,action);
                     break;
 
                 case "view":
-                    View viewed = new View(writerHelper, input);
-                    viewed.addToViewed(action);
+                    View viewed = new View(writerHelper);
+                    viewed.addToViewed(user, action);
                     break;
 
                 case "rating":
                     Rating rating = new Rating(writerHelper, input);
-                    rating.addRating(action);
+                    rating.addRating(user, action);
                     break;
                 default:
                     break;

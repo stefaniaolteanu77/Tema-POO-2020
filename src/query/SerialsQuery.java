@@ -2,6 +2,7 @@ package query;
 
 import fileio.ActionInputData;
 import fileio.Input;
+import fileio.Writer;
 import query.video.VideoDuration;
 import query.video.VideoFavorite;
 import query.video.VideoMostViewed;
@@ -10,11 +11,16 @@ import utils.WriterHelper;
 
 import java.io.IOException;
 
-public class SerialsQuery extends Query{
+public class SerialsQuery {
+    private WriterHelper writerHelper;
+    private Input input;
+
     public SerialsQuery(WriterHelper writerHelper, Input input) {
-        super(writerHelper, input);
+        this.writerHelper = writerHelper;
+        this.input = input;
     }
-    public void applySerialsQuery(final ActionInputData action, final Input input) throws IOException {
+
+    public void applySerialsQuery(final ActionInputData action) throws IOException {
         switch (action.getCriteria()) {
             case "ratings":
                 VideoRating videoRating = new VideoRating();
@@ -26,7 +32,8 @@ public class SerialsQuery extends Query{
                 break;
             case "most_viewed":
                 VideoMostViewed videoMostViewed = new VideoMostViewed();
-                videoMostViewed.querySerialMostViewd(input, action, writerHelper);
+                videoMostViewed.querySerialMostViewed(input, action, writerHelper);
+                break;
             case "favorite":
                 VideoFavorite videoFavorite = new VideoFavorite();
                 videoFavorite.querySerialFavorite(input, action, writerHelper);

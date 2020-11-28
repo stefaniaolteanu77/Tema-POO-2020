@@ -7,10 +7,14 @@ import utils.WriterHelper;
 import java.io.IOException;
 
 
-public final class Favorite extends Command {
+public final class Favorite {
+
+    private WriterHelper writerHelper;
+    private Input input;
 
     public Favorite(WriterHelper writerHelper, Input input) {
-        super(writerHelper, input);
+        this.writerHelper = writerHelper;
+        this.input = input;
     }
 
     private String duplicateErrormessage(final String title) {
@@ -26,11 +30,10 @@ public final class Favorite extends Command {
     }
 
 
-    public void addToFavourite(final ActionInputData action) throws IOException {
+    public void addToFavourite(final UserInputData user, final ActionInputData action) throws IOException {
         String title = action.getTitle();
-        UserInputData user = User.lookForUserInDataBase(users,action);
-        if (user != null && User.lookInHistory(user, title)) {
-            if (User.lookInFavorite(user, title)) {
+        if (user.getHistory().containsKey(title)) {
+            if (user.getFavoriteMovies().contains(title)) {
                 writerHelper.addToArrayResult(action, duplicateErrormessage(title));
             } else {
                 user.getFavoriteMovies().add(title);

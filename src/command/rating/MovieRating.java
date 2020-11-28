@@ -23,17 +23,7 @@ public class MovieRating {
     public void addToRatingList(Double grade) {
         List<Double> ratings = movie.getRatings();
         ratings.add(grade);
+        movie.setRatings(ratings);
     }
 
-    public Double getTotalMovieRating() {
-        List<Double> ratings = movie.getRatings();
-        if (ratings.isEmpty()){
-            return Double.valueOf(0);
-        }
-        double sum = 0;
-        for (Double rating : ratings) {
-            sum += rating;
-        }
-        return sum/ratings.size();
-    }
 }

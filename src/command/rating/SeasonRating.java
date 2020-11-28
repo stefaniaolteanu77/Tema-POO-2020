@@ -39,9 +39,24 @@ public class SeasonRating {
         ArrayList<Season> seasons = serial.getSeasons();
         for (Season season : seasons) {
             if (season.getCurrentSeason() == this.season) {
-                season.setRating(grade);
+               season.setRating(grade);
             }
         }
     }
+
+    public void addSerialRating(UserInputData user) {
+        List<Season> seasons = serial.getSeasons();
+        double sum = 0;
+        for (Season season : seasons) {
+            if (season.getRating() != 0) {
+                sum += season.getRating();
+            }
+        }
+        double totalRating = sum / serial.getNumberSeason();
+        Map <String, Double> serialRating = serial.getSerialRating();
+        serialRating.put(user.getUsername(), totalRating);
+        serial.setSerialRating(serialRating);
+    }
+
 
 }

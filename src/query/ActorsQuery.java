@@ -2,6 +2,7 @@ package query;
 
 import fileio.ActionInputData;
 import fileio.Input;
+import fileio.Writer;
 import query.actor.QueryAverage;
 import query.actor.QueryAwards;
 import query.actor.QueryDescription;
@@ -9,12 +10,16 @@ import utils.WriterHelper;
 
 import java.io.IOException;
 
-public class ActorsQuery extends Query{
+public class ActorsQuery {
+    private WriterHelper writerHelper;
+    private Input input;
+
     public ActorsQuery(WriterHelper writerHelper, Input input) {
-        super(writerHelper, input);
+        this.writerHelper = writerHelper;
+        this.input = input;
     }
 
-    public void applyActorsQuery(final ActionInputData action, final Input input) throws IOException {
+    public void applyActorsQuery(final ActionInputData action) throws IOException {
         switch (action.getCriteria()) {
             case "average":
                 QueryAverage queryAverage = new QueryAverage(input.getMovies(),input.getSerials());

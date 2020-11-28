@@ -21,7 +21,7 @@ public class Sort {
                             thenComparing(Map.Entry.comparingByKey(Comparator.reverseOrder())))
                     .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
         }
-
+        
         if (action.getNumber() != 0) {
             return sortedMap.keySet().stream()
                     .limit(action.getNumber()).collect(Collectors.toList());
