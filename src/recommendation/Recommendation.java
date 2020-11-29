@@ -1,18 +1,26 @@
 package recommendation;
-import fileio.*;
+
+import fileio.Input;
+import fileio.UserInputData;
+import fileio.ActionInputData;
 import utils.WriterHelper;
 
 import java.io.IOException;
 
-public class Recommendation {
+public final class Recommendation {
     private final WriterHelper writerHelper;
     private final Input input;
 
-    public Recommendation(WriterHelper writerHelper, Input input) {
+    public Recommendation(final WriterHelper writerHelper, final Input input) {
         this.writerHelper = writerHelper;
         this.input = input;
     }
 
+    /**
+     * Applies recommendation based on the type of the action
+     * @param action the action to be done
+     * @throws IOException in case the result cannot be written to output
+     */
     public void applyRecommendation(final ActionInputData action)
             throws IOException {
 

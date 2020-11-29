@@ -2,7 +2,6 @@ package query;
 
 import fileio.ActionInputData;
 import fileio.Input;
-import fileio.Writer;
 import query.video.VideoDuration;
 import query.video.VideoFavorite;
 import query.video.VideoMostViewed;
@@ -11,24 +10,29 @@ import utils.WriterHelper;
 
 import java.io.IOException;
 
-public class MoviesQuery {
+public final class MoviesQuery {
     private final WriterHelper writerHelper;
     private final Input input;
 
-    public MoviesQuery(WriterHelper writerHelper, Input input) {
+    public MoviesQuery(final WriterHelper writerHelper, final Input input) {
         this.writerHelper = writerHelper;
         this.input = input;
     }
 
+    /**
+     * Applies query on movies based on a criteria
+     * @param action the action to be done
+     * @throws IOException in case the result cannot pe written to output
+     */
     public void applyMoviesQuery(final ActionInputData action) throws IOException {
         switch (action.getCriteria()) {
             case "ratings":
                 VideoRating videoRating = new VideoRating();
-                videoRating.queryMovieRating(input,action,writerHelper);
+                videoRating.queryMovieRating(input, action, writerHelper);
                 break;
             case "longest":
                 VideoDuration videoDuration = new VideoDuration();
-                videoDuration.queryMovieDuration(input,action,writerHelper);
+                videoDuration.queryMovieDuration(input, action, writerHelper);
                 break;
             case "most_viewed":
                 VideoMostViewed videoMostViewed = new VideoMostViewed();

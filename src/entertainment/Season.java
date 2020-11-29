@@ -1,7 +1,5 @@
 package entertainment;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Information about a season of a tv show
@@ -26,7 +24,7 @@ public final class Season {
     public Season(final int currentSeason, final int duration) {
         this.currentSeason = currentSeason;
         this.duration = duration;
-        rating = (double)0;
+        rating = (double) 0;
     }
 
     public int getCurrentSeason() {
@@ -45,7 +43,7 @@ public final class Season {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(final Double rating) {
         this.rating = rating;
     }
 

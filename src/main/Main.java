@@ -2,9 +2,12 @@ package main;
 
 import checker.Checkstyle;
 import checker.Checker;
-import command.*;
+import command.Command;
 import common.Constants;
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.Input;
+import fileio.Writer;
+import fileio.InputLoader;
 import org.json.simple.JSONArray;
 import query.Query;
 import recommendation.Recommendation;
@@ -30,6 +33,7 @@ public final class Main {
 
     /**
      * Call the main checker and the coding style checker
+     *
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
@@ -73,10 +77,10 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-        WriterHelper writerHelper = new WriterHelper(fileWriter,arrayResult);
+        WriterHelper writerHelper = new WriterHelper(fileWriter, arrayResult);
         Command command = new Command(writerHelper, input);
-        Query query = new Query(writerHelper,input);
-        Recommendation recomm = new Recommendation(writerHelper,input);
+        Query query = new Query(writerHelper, input);
+        Recommendation recomm = new Recommendation(writerHelper, input);
         List<ActionInputData> actions = input.getCommands();
         for (ActionInputData action : actions) {
             command.applyCommand(action);

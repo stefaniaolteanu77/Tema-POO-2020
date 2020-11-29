@@ -26,7 +26,6 @@ public abstract class ShowInput {
     private final ArrayList<String> genres;
 
 
-
     public ShowInput(final String title, final int year,
                      final ArrayList<String> cast, final ArrayList<String> genres) {
         this.title = title;

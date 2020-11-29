@@ -44,6 +44,7 @@ public final class UserInputData {
         seasonsRated = new HashMap<>();
         serialsRating = new HashMap<>();
     }
+
     public String getUsername() {
         return username;
     }

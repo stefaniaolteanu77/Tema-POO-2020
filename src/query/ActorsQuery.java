@@ -2,7 +2,6 @@ package query;
 
 import fileio.ActionInputData;
 import fileio.Input;
-import fileio.Writer;
 import query.actor.QueryAverage;
 import query.actor.QueryAwards;
 import query.actor.QueryDescription;
@@ -10,28 +9,34 @@ import utils.WriterHelper;
 
 import java.io.IOException;
 
-public class ActorsQuery {
-    private WriterHelper writerHelper;
-    private Input input;
+public final class ActorsQuery {
+    private final WriterHelper writerHelper;
+    private final Input input;
 
-    public ActorsQuery(WriterHelper writerHelper, Input input) {
+    public ActorsQuery(final WriterHelper writerHelper, final Input input) {
         this.writerHelper = writerHelper;
         this.input = input;
     }
 
+    /**
+     * Applies query on actors based on a criteria
+     * @param action the action to be done
+     * @throws IOException in case the result cannot pe written to output
+     */
     public void applyActorsQuery(final ActionInputData action) throws IOException {
         switch (action.getCriteria()) {
             case "average":
-                QueryAverage queryAverage = new QueryAverage(input.getMovies(),input.getSerials());
-                queryAverage.queryAverage(input, action, writerHelper);
+                QueryAverage queryAverage = new QueryAverage(input, action, writerHelper);
+                queryAverage.applyQueryAverage();
                 break;
             case "filter_description":
-                QueryDescription qD = new QueryDescription();
-                qD.queryDescription(input,action,writerHelper);
+                QueryDescription queryDescription = new QueryDescription(input,
+                                                        action, writerHelper);
+                queryDescription.applyQueryDescription();
                 break;
             case "awards":
-                QueryAwards queryAwards = new QueryAwards();
-                queryAwards.queryAward(input, action, writerHelper);
+                QueryAwards queryAwards = new QueryAwards(input, action, writerHelper);
+                queryAwards.applyQueryAward();
                 break;
             default:
                 break;

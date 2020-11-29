@@ -16,7 +16,6 @@ public final class MovieInputData extends ShowInput {
     private List<Double> ratings;
 
 
-
     public MovieInputData(final String title, final ArrayList<String> cast,
                           final ArrayList<String> genres, final int year,
                           final int duration) {
@@ -33,9 +32,10 @@ public final class MovieInputData extends ShowInput {
         return ratings;
     }
 
-    public void setRatings(List<Double> ratings) {
+    public void setRatings(final List<Double> ratings) {
         this.ratings = ratings;
     }
+
     @Override
     public String toString() {
         return "MovieInputData{" + "title= "

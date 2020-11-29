@@ -3,7 +3,6 @@ package query.user;
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
-import fileio.Writer;
 import utils.Sort;
 import utils.WriterHelper;
 
@@ -14,24 +13,35 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class NumberRatings {
-    private WriterHelper writerHelper;
-    private Input input;
+public final class NumberRatings {
+    private final WriterHelper writerHelper;
+    private final Input input;
 
-    public NumberRatings(WriterHelper writerHelper, Input input) {
+    public NumberRatings(final WriterHelper writerHelper, final Input input) {
         this.writerHelper = writerHelper;
         this.input = input;
     }
 
-    public Integer getUserRating(UserInputData user) {
-        int SerialRatings = 0;
-        for(List<Integer> seasons : user.getSeasonsRated().values()) {
-            SerialRatings += seasons.size();
+    /**
+     * Finds the number of videos rated by a user
+     * @param user the user for which we want to find the
+     *             number of videos rated
+     * @return number of videos rated
+     */
+    public Integer getUserRating(final UserInputData user) {
+        int serialRatings = 0;
+        for (List<Integer> seasons : user.getSeasonsRated().values()) {
+            serialRatings += seasons.size();
         }
-        return user.getMoviesRated().size() + SerialRatings;
+        return user.getMoviesRated().size() + serialRatings;
     }
 
-    public void applyQueryNumberRatings(ActionInputData action) throws IOException {
+    /**
+     * Forms a list of the users sorted by the number of ratings they did
+     * @param action the action to be done
+     * @throws IOException in case the result cannot be written to output
+     */
+    public void applyQueryNumberRatings(final ActionInputData action) throws IOException {
         Map<String, Integer> numberRatings = new LinkedHashMap<>();
         for (UserInputData user : input.getUsers()) {
             Integer number = getUserRating(user);
@@ -39,7 +49,7 @@ public class NumberRatings {
                 numberRatings.put(user.getUsername(), number);
             }
         }
-        List<String> avgActors = Sort.sortByInteger(numberRatings,action);
+        List<String> avgActors = Sort.sortByInteger(numberRatings, action);
         String result = avgActors.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(", ", "Query result: [", "]"));

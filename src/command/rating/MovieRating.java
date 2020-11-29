@@ -5,22 +5,41 @@ import fileio.UserInputData;
 
 import java.util.List;
 
-public class MovieRating {
-    MovieInputData movie;
+public final class MovieRating {
+    private final MovieInputData movie;
+    private final UserInputData user;
 
-    public MovieRating(MovieInputData movie) {
+    public MovieRating(final MovieInputData movie, final UserInputData user) {
         this.movie = movie;
+        this.user = user;
     }
-    public void addMovieToRated(UserInputData user, String title) {
+
+    /**
+     *   Adds movie to a list of the movies rated by the
+     * user
+     * @param title the title of the movie to be rated
+     */
+    public void addMovieToRated(final String title) {
         List<String> ratings = user.getMoviesRated();
         ratings.add(title);
     }
 
-    public boolean isMovieRated(UserInputData user,String title) {
+    /**
+     *
+     * @param title the title of the movie that needs
+     *      to be checked if it's rated
+     * @return whether the movie is rated or not
+     */
+    public boolean isMovieRated(final String title) {
         List<String> ratings = user.getMoviesRated();
         return ratings.contains(title);
     }
-    public void addToRatingList(Double grade) {
+
+    /**
+     * Add the grade to the movie's rating list
+     * @param grade the grade given to the movie
+     */
+    public void addToRatingList(final Double grade) {
         List<Double> ratings = movie.getRatings();
         ratings.add(grade);
         movie.setRatings(ratings);

@@ -4,7 +4,6 @@ import entertainment.Season;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +45,7 @@ public final class SerialInputData extends ShowInput {
         return serialRating;
     }
 
-    public void setSerialRating(Map<String, Double> serialRating) {
+    public void setSerialRating(final Map<String, Double> serialRating) {
         this.serialRating = serialRating;
     }
 

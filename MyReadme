@@ -1,0 +1,24 @@
+Olteanu Cristiana-Stefania 322CD
+
+    Pentru a simplifica main-ul m-am folosit de 3 clase din care porneste intreaga
+implementare (Command, Query si Recommendation) fiecare avand pachetul sau separat.
+    Command se foloseste de clasele View, Favorite si Rating care efectueaza actiuni
+directe prin intermediul unui user. Clasa Rating se foloseste de doua clase din
+subpachetul rating MovieRating si SerialRating. Tin evidenta filmelor si sezoanelor
+dintr-un serial rated de catre user prin intermediul unei liste si unui map adugate
+de mine in clasa UserInputData. De asemenea, global tin minte ratingul unui film
+respectiv al unui serial prin liste adaugate in clasele SerialInputData si
+MovieInputData.
+    Query se foloseste de clasele ActorsQuery, MovieQuery si SerialsQuery fiecare
+avand cate un subpachet pentru clasele lor ajutatoare. De asemenea, aceste clase se
+folosesc de clasele din pachetul filters ActorFilters, MovieFilters, SerialFilters
+care aplica filtrele pentru fiecare entitate in parte inainte de a incepe implementarea
+algoritmului principal. Fiecare subpachet din query ajuta la implemetarea unuei
+functionalitati specifice entitatii conform careia a fost numita.
+    Recommendation se foloseste de clasele din pachetul numit dupa acesta. Fiecare
+clasa implementeaza fiecare strategie de recomandare din enunt.
+    In pachetul utils am aduagta doua clase statice necesare in implementare. Clasa
+WriterHelper ascunde JSONArray si Writer de implementare ajutand la scrierea in fisiere.
+Clasa sort ajuta la sortarile din query realizate prin intermediul unui LinkedHashMap si
+stream-uri. Aceste sortari sunt cele realizate conform a doua criterii, primul cel
+specificat in enunt dupe valoare si al doilea alfabetic dupa cheie.

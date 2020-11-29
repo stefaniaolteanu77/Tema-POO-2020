@@ -1,6 +1,6 @@
 package command;
+
 import fileio.ActionInputData;
-import fileio.Input;
 import fileio.UserInputData;
 import utils.WriterHelper;
 
@@ -9,12 +9,10 @@ import java.io.IOException;
 
 public final class Favorite {
 
-    private WriterHelper writerHelper;
-    private Input input;
+    private final WriterHelper writerHelper;
 
-    public Favorite(WriterHelper writerHelper, Input input) {
+    public Favorite(final WriterHelper writerHelper) {
         this.writerHelper = writerHelper;
-        this.input = input;
     }
 
     private String duplicateErrormessage(final String title) {
@@ -29,8 +27,14 @@ public final class Favorite {
         return "success -> " + title + " was added as favourite";
     }
 
-
-    public void addToFavourite(final UserInputData user, final ActionInputData action) throws IOException {
+    /**
+     * Adds videos to favorite if they have been seen
+     * @param user the user who does the action
+     * @param action the action that need to be done
+     * @throws IOException if result can't be written to output
+     */
+    public void addToFavourite(final UserInputData user,
+                               final ActionInputData action) throws IOException {
         String title = action.getTitle();
         if (user.getHistory().containsKey(title)) {
             if (user.getFavoriteMovies().contains(title)) {
